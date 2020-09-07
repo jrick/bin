@@ -1,0 +1,47 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use v5.030;
+use OpenBSD::Paths;
+use OpenBSD::Pledge;
+use OpenBSD::Unveil;
+
+unveil(OpenBSD::Paths->ftp, 'x') || die $!;
+pledge(qw( proc exec )) || die $!;
+
+sub usage
+{
+	say STDERR 'usage: prdiff owner/repo#pr';
+	exit 1;
+}
+
+@ARGV == 1 || usage();
+
+sub ftp_get
+{
+	my $url = shift;
+	my @cmd = (OpenBSD::Paths->ftp, '-VMo-', $url, '|');
+	open(FTP_STDOUT, "@cmd") or die "open `@cmd` failed: $!";
+	my $is_diff;
+	while (my $line = <FTP_STDOUT>) {
+		unless ($is_diff ||= $line =~ m/^diff /) {
+			close(FTP_STDOUT);
+			die "not a pull request";
+		}
+		print $line;
+	}
+	close(FTP_STDOUT);
+}
+
+sub print_pr
+{
+	my ($repo, $pull_num) = @_;
+	my $url = 'https://patch-diff.githubusercontent.com' .
+		"/raw/$repo/pull/$pull_num.diff";
+	ftp_get($url);
+}
+
+my @args = $ARGV[0] =~ m{^([\w-]+/[\w-]+)#(\d+)$}; # owner/repo#pr
+@args == 2 || usage();
+print_pr(@args);

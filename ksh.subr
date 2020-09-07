@@ -1,0 +1,19 @@
+#!/bin/ksh
+
+got-push() {
+	local p r
+	p="$PWD"
+	while [ ! -e "$p/.got/repository" ]; do
+		if [ "$p" = "/" ]; then
+			echo "$PWD: not a got checkout" 1>&2
+			return 1
+		fi
+		p=$(dirname "$p")
+	done
+	read r < "$p/.got/repository"
+	(cd "$r" && git push "$@")
+}
+
+sloc-go() {
+    find . -name '*.go' | xargs egrep -v '^[:space:]*($|(//))' | wc -l | tail -1
+}

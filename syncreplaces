@@ -1,0 +1,31 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use v5.030;
+
+sub usage {
+	print STDERR <<'EOF';
+usage: syncreplaces upstream fork version
+
+example:
+  $ syncreplaces github.com/{decred,marcopeereboom}/dcrd treasury4 
+EOF
+	exit(2);
+}
+
+@ARGV == 3 || usage();
+my ($upstream, $fork, $version) = @ARGV;
+
+sub gomod {
+	system("go", "mod", @_) == 0 or die $!;
+}
+
+foreach (`go list -m all`) {
+	my ($upstream_mod) = m/^(${upstream}.*) v.+ => / or next;
+	my $fork_mod = $upstream_mod =~ s/${upstream}/${fork}/r;
+
+	print "replacing $upstream_mod => $fork_mod\n";
+
+	gomod('edit', "-replace=${upstream_mod}=${fork_mod}\@${version}");
+	gomod('tidy');
+}
