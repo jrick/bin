@@ -1,7 +1,7 @@
 #!/bin/ksh
 
 got-push() {
-	local r=$(got info | perl -anE 'say $1 if /^repository: (.*)/')
+    	local r=$(got info | perl -nE 'say $1 if /^repository: (.*)/')
 	[ -z "$r" ] && return 1
 	(cd "$r" && git push "$@")
 }
