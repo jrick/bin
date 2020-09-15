@@ -1,16 +1,8 @@
 #!/bin/ksh
 
 got-push() {
-	local p r
-	p="$PWD"
-	while [ ! -e "$p/.got/repository" ]; do
-		if [ "$p" = "/" ]; then
-			echo "$PWD: not a got checkout" 1>&2
-			return 1
-		fi
-		p=$(dirname "$p")
-	done
-	read r < "$p/.got/repository"
+	local r=$(got info | awk '/^repository: / { print $2 }')
+	[ -z "$r" ] && return 1
 	(cd "$r" && git push "$@")
 }
 
