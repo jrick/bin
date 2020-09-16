@@ -2,9 +2,17 @@
 use strict;
 use warnings;
 use File::Find;
+use OpenBSD::Pledge;
+use OpenBSD::Unveil;
 use v5.030;
 
-my $source_path = $ARGV[0] || '.';
+pledge(qw( rpath unveil )) || die $!;
+
+my $source_path = $ARGV[0] || $ENV{PWD};
+
+chdir($source_path);
+unveil($source_path, 'r') || die $!;
+pledge(qw( rpath )) || die $!;
 
 my $all = 0;
 my $code = 0;
@@ -13,7 +21,7 @@ my $comments = 0;
 sub process_file {
 	return unless /\.go$/;
 	open my ($fd), $_;
-	while (<$fd>) {
+	while (readline $fd) {
 		$all++;
 
 		# skip empty/whitespace lines
