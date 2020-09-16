@@ -8,9 +8,9 @@ use v5.030;
 
 pledge(qw( rpath unveil )) || die $!;
 
-my $source_path = $ARGV[0] || $ENV{PWD};
+my $source_path = $ARGV[0] || '.';
 
-chdir($source_path);
+chdir($source_path) if $source_path ne '.';
 unveil($source_path, 'r') || die $!;
 pledge(qw( rpath )) || die $!;
 
