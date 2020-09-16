@@ -52,10 +52,10 @@ die 'no matching source code found' unless $nonblank;
 my $code_percent = $code / $nonblank * 100;
 my $comments_percent = 100 - $code_percent;
 
-say 'all       : ', $all;
-say 'blank     : ', $all - $nonblank;
-say 'nonblank  : ', $nonblank;
-say 'code      : ', $code;
-say '%code     : ', $code_percent;
-say 'comments  : ', $comments;
-say '%comments : ', $comments_percent;
+my $len = length "$all";
+
+printf 'all       : ' . "%${len}d\n", $all;
+printf 'blank     : ' . "%${len}d\n", $all - $nonblank;
+printf 'nonblank  : ' . "%${len}d\n", $nonblank;
+printf 'code      : ' . "%${len}d (%.2f%%)\n", $code, $code_percent;
+printf 'comments  : ' . "%${len}d (%.2f)\n", $comments, $comments_percent;
