@@ -1,0 +1,37 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use File::Find;
+use v5.030;
+
+my $source_path = $ARGV[0] || ".";
+
+my $code = 0;
+my $comments = 0;
+
+sub process_file {
+	return unless /\.go$/;
+	open my ($fd), $_;
+	while (<$fd>) {
+		if (m{^\s*((//)|$)}n) {
+			$comments++;
+			next;
+		}
+		$code++;
+	}
+	close $fd;
+}
+
+find(\&process_file, $source_path);
+
+my $all = $code + $comments;
+die "no matching source code found" unless $all;
+
+my $code_percent = $code / $all * 100;
+my $comments_percent = 100 - $code_percent;
+
+say "all       : ", $all;
+say "code      : ", $code;
+say "%code     : ", $code_percent;
+say "comments  : ", $comments;
+say "%comments : ", $comments_percent;
