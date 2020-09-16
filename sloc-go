@@ -54,8 +54,8 @@ my $comments_percent = 100 - $code_percent;
 
 my $len = length "$all";
 
-printf 'all       : ' . "%${len}d\n", $all;
-printf 'blank     : ' . "%${len}d\n", $all - $nonblank;
-printf 'nonblank  : ' . "%${len}d\n", $nonblank;
-printf 'code      : ' . "%${len}d (%.2f%%)\n", $code, $code_percent;
-printf 'comments  : ' . "%${len}d (%.2f)\n", $comments, $comments_percent;
+printf "all       : %${len}d\n", $all;
+printf "blank     : %${len}d\n", $all - $nonblank;
+printf "nonblank  : %${len}d\n", $nonblank;
+printf "code      : %${len}d (%.2f%%)\n", $code, $code_percent;
+printf "comments  : %${len}d (%.2f)\n", $comments, $comments_percent;
