@@ -21,17 +21,17 @@ sub usage
 sub ftp_get
 {
 	my $url = shift;
-	my @cmd = (OpenBSD::Paths->ftp, '-VMo-', $url, '|');
-	open(FTP_STDOUT, "@cmd") or die "open `@cmd` failed: $!";
+	my @cmd = (OpenBSD::Paths->ftp, '-VMo-', $url);
+	open(my $ftp_stdout, '-|', "@cmd") or die "open `@cmd` failed: $!";
 	my $is_diff;
-	while (my $line = <FTP_STDOUT>) {
+	while (my $line = readline $ftp_stdout) {
 		unless ($is_diff ||= $line =~ m/^diff /) {
-			close(FTP_STDOUT);
+			close($ftp_stdout);
 			die "not a pull request";
 		}
 		print $line;
 	}
-	close(FTP_STDOUT);
+	close($ftp_stdout);
 }
 
 sub print_pr
