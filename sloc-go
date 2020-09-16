@@ -20,7 +20,7 @@ my $comments = 0;
 
 sub process_file {
 	return unless /\.go$/;
-	open my ($fd), $_;
+	open(my $fd, $_);
 	while (readline $fd) {
 		$all++;
 
