@@ -32,9 +32,10 @@ sub process_file {
 }
 
 find(\&process_file, $source_path);
-die 'no matching source code found' unless $all and ($code + $comments);
 
 my $nonblank = $code + $comments;
+die 'no matching source code found' unless $nonblank;
+
 my $code_percent = $code / $nonblank * 100;
 my $comments_percent = 100 - $code_percent;
 
