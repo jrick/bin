@@ -16,10 +16,10 @@ sub process_file {
 	while (<$fd>) {
 		$all++;
 
-		# skip empty/whitespace lines		
-		next if (m{^\s*$});
+		# skip empty/whitespace lines
+		next if /^\s*$/;
 
-		# count comments		
+		# count comments
 		if (m{^\s*//}) {
 			$comments++;
 			next;
