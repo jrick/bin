@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Fcntl ':mode';
+use File::Basename;
 use File::Find;
 use OpenBSD::Pledge;
 use OpenBSD::Unveil;
@@ -9,9 +11,15 @@ use v5.030;
 pledge(qw( rpath unveil )) || die $!;
 
 my $source_path = $ARGV[0] || '.';
-
-chdir($source_path) if $source_path ne '.';
-unveil($source_path, 'r') || die $!;
+my $work_dir = $source_path;
+if ($work_dir ne '.') {
+	my $mode = (stat($work_dir))[2];
+	if (S_ISREG($mode)) {
+		$work_dir = (fileparse($work_dir))[1];
+	}
+	chdir($work_dir) || die $!;
+}
+unveil($work_dir, 'r') || die $!;
 unveil() || die $!;
 
 my $all = 0;
