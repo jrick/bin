@@ -20,7 +20,7 @@ sub process_file {
 		next if (m{^\s*$});
 
 		# count comments		
-		if (m{^\s*//}n) {
+		if (m{^\s*//}) {
 			$comments++;
 			next;
 		}
