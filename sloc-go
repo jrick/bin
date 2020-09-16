@@ -12,7 +12,7 @@ my $source_path = $ARGV[0] || '.';
 
 chdir($source_path) if $source_path ne '.';
 unveil($source_path, 'r') || die $!;
-pledge(qw( rpath )) || die $!;
+unveil() || die $!;
 
 my $all = 0;
 my $code = 0;
