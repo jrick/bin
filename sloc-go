@@ -13,9 +13,9 @@ pledge(qw( rpath unveil )) || die $!;
 my $source_path = $ARGV[0] || '.';
 my $work_dir = $source_path;
 if ($work_dir ne '.') {
-	my $mode = (stat($work_dir))[2];
-	if (S_ISREG($mode)) {
-		$work_dir = (fileparse($work_dir))[1];
+	my $mode = (stat($work_dir))[2] || die $!;
+	if (Fcntl::S_ISREG($mode)) {
+		$work_dir = dirname($work_dir);
 	}
 	chdir($work_dir) || die $!;
 }
