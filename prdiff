@@ -22,7 +22,7 @@ sub ftp_get
 {
 	my $url = shift;
 	my @cmd = (OpenBSD::Paths->ftp, '-VMo-', $url);
-	open(my $ftp_stdout, '-|', "@cmd") or die "open `@cmd` failed: $!";
+	open(my $ftp_stdout, '-|', @cmd) or die "open `@cmd` failed: $!";
 	my $is_diff;
 	while (my $line = readline $ftp_stdout) {
 		unless ($is_diff ||= $line =~ m/^diff /) {
