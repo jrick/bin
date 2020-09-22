@@ -5,3 +5,7 @@ got-push() {
 	[ -z "$r" ] && return 1
 	(cd "$r" && git push "$@")
 }
+
+hexrev() {
+	perl -ne 'print reverse(/../g), "\n"'
+}
