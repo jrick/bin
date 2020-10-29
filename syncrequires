@@ -1,0 +1,34 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use OpenBSD::Pledge;
+use v5.030;
+
+pledge(qw( proc exec )) or die $!;
+
+sub usage {
+	print STDERR <<'EOF';
+usage: syncrequires modprefix version
+
+examples:
+  $ syncrequires github.com/decred/dcrd/ master
+  $ syncrequires github.com/decred/dcrd/ latest
+EOF
+	exit 2;
+}
+
+sub go {
+	system("go", @_) == 0 or die $!;
+}
+
+@ARGV == 2 || usage();
+my ($base_module, $version) = @ARGV;
+
+foreach (`go list -m all`) {
+	chomp;
+	my ($mod) = m/^(${base_module}[^\s]*) v[^\s]+\.[^\s]+\.[^\s]+$/ or next;
+
+	say "updating ${mod} => ${version}";
+
+	go("get", "${mod}\@${version}");
+}
