@@ -21,8 +21,8 @@ sub gomod {
 }
 
 foreach (`go list -m all`) {
-	my ($upstream_mod) = m/^(${upstream}.*) v.+ => / or next;
-	my $fork_mod = $upstream_mod =~ s/${upstream}/${fork}/r;
+	my ($upstream_mod) = m/^(\Q${upstream}\E.*) v.+ => / or next;
+	my $fork_mod = $upstream_mod =~ s/\Q${upstream}\E/${fork}/r;
 
 	print "replacing $upstream_mod => $fork_mod\n";
 

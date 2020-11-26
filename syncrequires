@@ -26,7 +26,7 @@ my ($base_module, $version) = @ARGV;
 
 foreach (`go list -m all`) {
 	chomp;
-	my ($mod) = m/^(${base_module}[^\s]*) v[^\s]+\.[^\s]+\.[^\s]+$/ or next;
+	my ($mod) = m/^(\Q${base_module}\E[^\s]*) v[^\s]+\.[^\s]+\.[^\s]+$/ or next;
 
 	say "updating ${mod} => ${version}";
 
