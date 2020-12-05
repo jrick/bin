@@ -9,3 +9,7 @@ got-push() {
 hexrev() {
 	perl -ne 'print reverse(/../g), "\n"'
 }
+
+hexenc() {
+	perl -e 'while (read STDIN, $_, 1) { printf "%02x", ord }; print "\n"'
+}
