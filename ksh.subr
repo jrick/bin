@@ -13,3 +13,7 @@ hexrev() {
 hexenc() {
 	perl -e 'while (read STDIN, $_, 1) { printf "%02x", ord }; print "\n"'
 }
+
+randport() {
+	jot -r 1 49152 65535
+}
