@@ -17,3 +17,7 @@ hexenc() {
 randport() {
 	jot -r 1 49152 65535
 }
+
+v6suffix() {
+	perl -E 'say join(":", `openssl rand 8 -hex` =~ /.{4}/g)'
+}
