@@ -1,9 +1,22 @@
 #!/bin/ksh
 
+got() {
+	if [ $# -ge 1 ]; then
+		_cmd="got-$1"
+		if command -v "${_cmd}" >/dev/null; then
+			shift
+			"${_cmd}" "$@"
+			return $?
+		fi
+	fi
+	command got "$@"
+}
+
 got-push() {
-	local r=$(got info | perl -ne 'print if s/^repository: //')
-	[ -z "$r" ] && return 1
-	(cd "$r" && git push "$@")
+	local _r
+	_r=$(got info | perl -ne 'print if s/^repository: //')
+	[[ -z "$_r" ]] && return 1
+	(cd "$_r" && git push "$@")
 }
 
 hexrev() {
