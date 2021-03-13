@@ -1,6 +1,7 @@
 #!/bin/ksh
 
 got() {
+	local _cmd
 	if [ $# -ge 1 ]; then
 		_cmd="got-$1"
 		if command -v "${_cmd}" >/dev/null; then
