@@ -13,11 +13,15 @@ got() {
 	command got "$@"
 }
 
-got-push() {
+got-git() {
 	local _r
 	_r=$(got info | perl -ne 'print if s/^repository: //')
 	[[ -z "$_r" ]] && return 1
-	(cd "$_r" && git push "$@")
+	(cd "$_r" && git "$@")
+}
+
+got-push() {
+	got-git push "$@"
 }
 
 hexrev() {
