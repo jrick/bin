@@ -15,8 +15,8 @@ got() {
 
 got-git() {
 	local _r
-	_r=$(got info | perl -ne 'print if s/^repository: //')
-	[[ -z "$_r" ]] && return 1
+	_r=$(	set -o pipefail;
+		got info | perl -ne 'print if s/^repository: //' ) || return
 	(cd "$_r" && git "$@")
 }
 
