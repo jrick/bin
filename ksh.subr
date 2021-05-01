@@ -7,7 +7,7 @@ got() {
 		if command -v "${_cmd}" >/dev/null; then
 			shift
 			"${_cmd}" "$@"
-			return $?
+			return
 		fi
 	fi
 	command got "$@"
