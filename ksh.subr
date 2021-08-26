@@ -22,10 +22,6 @@ got-git() {
 	(cd "$_r" && git "$@")
 }
 
-got-push() {
-	got-git push "$@"
-}
-
 hexrev() {
 	perl -ne 'print reverse(/../g), "\n"'
 }
