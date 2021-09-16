@@ -1,0 +1,21 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use v5.030;
+
+my %hashes;
+my $hashre = qr/([0-9a-fA-F]{64})/;
+
+while (<>) {
+	chomp;
+	my @fields = split($hashre, $_);
+	for (my $i = 0; $i < scalar @fields; $i++) {
+		my $field = $fields[$i];
+		next unless $field =~ $hashre;
+		if (!defined $hashes{$field}) {
+			$hashes{$field} = scalar %hashes;
+		}
+		$fields[$i] = "<hash ${hashes{$field}}>";
+	}
+	say join('', @fields);
+}
