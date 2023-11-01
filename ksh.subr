@@ -22,6 +22,12 @@ got-git() {
 	(cd "$_r" && git "$@")
 }
 
+got-fetch-googlesource() {
+	local _commit="$1"
+	local _branch="$2"
+	got git fetch -f googlesource "${_commit}:${_branch}"
+}
+
 hexrev() {
 	perl -ne 'print reverse(/../g), "\n"'
 }
