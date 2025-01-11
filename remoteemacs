@@ -1,0 +1,27 @@
+#!/usr/bin/env perl
+
+# On a remote system, use ssh to remotely execute emacsclient on the
+# client host to edit a file on the remote system in TRAMP mode.
+# Can be set as EDITOR.
+
+use strict;
+use warnings;
+
+my $file = $ARGV[0] || "";
+
+chomp(my $user = `whoami`);
+chomp(my $hostname = `hostname`);
+
+my $client_ip;
+open(my $who, "-|", "who") or die $!;
+while (<$who>) {
+	chomp;
+	if (s{^$user.*\((.*)\)$}{$1}) {
+		$client_ip = $_;
+		last;
+	}
+}
+close $who or die $!;
+die "Unknown client IP" unless $client_ip;
+
+exec("ssh", $client_ip, "emacsclient", "/ssh:$hostname:$file");
